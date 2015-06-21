@@ -1,0 +1,50 @@
+#
+# Makefile for 
+# 				Homework 6 of Advanced Data Structures in C. 
+#
+
+#
+# Tool chain definitions.
+#
+CC			= gcc
+LN			= gcc
+
+RM			= \rm 
+
+#
+# The flags OR options for compilation.
+#
+# -g -> Enable GDB Debug symbol information.
+DBG         = -DDEBUG
+C_OPTS		= -g $(DBG)
+
+					
+#
+# Variables for objects & headers.
+#
+MAKEFILE	= ./make_timerw_ag
+HEADERS		= timerw_ag.h 
+OBJECTS		= timerw_ag.o dlist.o
+OBJ  		= timerapp_ag.o 
+
+
+#
+# The executable output.
+#
+TGT	        = runtimerw_ag
+
+all			: $(TGT)
+
+#
+# Rules for building the target & dependecies.
+#
+ 
+$(TGT)	: $(OBJECTS) $(OBJ) $(HEADERS) $(MAKEFILE)
+	$(LN) -o $@ $(OBJ) $(OBJECTS)
+
+.c.o : 
+	$(CC) -c $(C_OPTS) $< -o $@
+
+clean		:
+	@echo	"Cleaning ..."
+	$(RM)	$(OBJECTS) $(OBJ) $(TGT)

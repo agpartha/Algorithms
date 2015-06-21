@@ -1,0 +1,49 @@
+#
+# Makefile for 
+# 				Homework 6 of Advanced Data Structures in C. 
+#
+
+#
+# Tool chain definitions.
+#
+CC			= gcc
+LN			= gcc
+
+RM			= \rm 
+
+#
+# The flags OR options for compilation.
+#
+# -g -> Enable GDB Debug symbol information.
+C_OPTS		= -g -DBUBBLE_SORT
+
+					
+#
+# Variables for objects & headers.
+#
+MAKEFILE	= ./make_bsort_ag
+HEADERS		= bsort_ag.h 
+OBJECTS		= bsort_ag.o
+OBJ  		= sortapp_ag.o 
+
+
+#
+# The executable output.
+#
+TGT	        = runbsort_ag
+
+all			: $(TGT)
+
+#
+# Rules for building the target & dependecies.
+#
+ 
+$(TGT)	: $(OBJECTS) $(OBJ) $(HEADERS) $(MAKEFILE)
+	$(LN) -o $@ $(OBJ) $(OBJECTS)
+
+.c.o : 
+	$(CC) -c $(C_OPTS) $< -o $@
+
+clean		:
+	@echo	"Cleaning ..."
+	$(RM)	$(OBJECTS) $(OBJ) $(TGT)
