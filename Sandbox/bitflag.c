@@ -29,6 +29,8 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 
 unsigned long  n_dsl       = 75;
@@ -87,7 +89,7 @@ void show_bits(char *bit_flag, unsigned long n_bits)
    }
 
    ban_max = (n_bits > 32) ? 31: n_bits - 1;
-   printf ("\nDSL  0 --> %d\n", ban_max);
+   printf ("\nDSL  0 --> %lu\n", ban_max);
 
    while (bit_cnt < n_bits) {
       printf("%d ", (*bit_flag & mask)  ? 1:0);
@@ -102,7 +104,7 @@ void show_bits(char *bit_flag, unsigned long n_bits)
         if (n_bits > bit_cnt) {
            ban_min = bit_cnt;
            ban_max = (bit_cnt + 32) > n_bits ? n_bits - 1: (bit_cnt + 31);
-           printf ("\nDSL %d --> %d\n", ban_min, ban_max);
+           printf ("\nDSL %lu --> %lu\n", ban_min, ban_max);
         } else 
            printf ("\n");
       }
@@ -133,7 +135,7 @@ int main (void)
   if (bit_flag) 
      memset(bit_flag, 0, n_bytes);
   else 
-     return;
+     return -1;
  
   /*
    * Set a few bit positions randomly to test the bits.
