@@ -36,56 +36,56 @@
 unsigned long  n_bits = 75;
 unsigned long  n_bytes = 0;
 
-void set_bit(char *bit_flag, unsigned long value)
+void set_bit(char *bit_map, unsigned long value)
 {
   /*
    * Get the byte number & the bit position in the byte
    * for this value. 
    */
    /* Ensure maximum bit popsition is withing our limits for bits to not voer shoot bitmap */
-   bit_flag  += (value % n_bits)/ 8;
-   *bit_flag |= (0x1 << (value % 8));
+   bit_map  += (value % n_bits)/ 8;
+   *bit_map |= (0x1 << (value % 8));
 }
 
 
-void clear_bit(char *bit_flag, unsigned long value)
+void clear_bit(char *bit_map, unsigned long value)
 {
   /*
    * Get the byte number & the bit position in the byte
    * for this value. 
    */
-   bit_flag  += (value % n_bits)/ 8;
-   *bit_flag &= ~(0x1 << (value % 8));
+   bit_map  += (value % n_bits)/ 8;
+   *bit_map &= ~(0x1 << (value % 8));
 }
 
-void set_n_bits(char *bit_flag, unsigned long n_bits)
+void set_n_bits(char *bit_map, unsigned long n_bits)
 {
 	if (n_bits > 8) {
-		memset (bit_flag, 0xFF, n_bits / 8);
-		*(bit_flag + n_bits/8) = (0xFF >> (8 - (n_bits % 8)));
+		memset (bit_map, 0xFF, n_bits / 8);
+		*(bit_map + n_bits/8) = (0xFF >> (8 - (n_bits % 8)));
 	}
 }
 
 
 
-int test_bit(char *bit_flag, unsigned long value)
+int test_bit(char *bit_map, unsigned long value)
 {
   /*
    * Get the byte number & the bit position in the byte
    * for this value. 
    */
-   bit_flag  += (value % n_bits)/ 8;
-   return(*bit_flag & (0x1 << (value % 8))) ? 1 : 0;
+   bit_map  += (value % n_bits)/ 8;
+   return(*bit_map & (0x1 << (value % 8))) ? 1 : 0;
 }
 
-void show_bits(char *bit_flag, unsigned long n_bits)
+void show_bits(char *bit_map, unsigned long n_bits)
 {
    unsigned long bit_cnt = 0;
    unsigned char mask = 0x01;
    unsigned long ban_min, ban_max;
 
    if (n_bits == 1)  {
-      printf("\nBits  0\n%d \n", *bit_flag & 0x01);
+      printf("\nBits  0\n%d \n", *bit_map & 0x01);
       return;
    }
    
@@ -94,13 +94,13 @@ void show_bits(char *bit_flag, unsigned long n_bits)
    printf ("\nBits  0 --> %lu\n", ban_max);
 
    while (bit_cnt < n_bits) {
-      printf("%d ", (*bit_flag & mask)  ? 1:0);
+      printf("%d ", (*bit_map & mask)  ? 1:0);
       bit_cnt++;
       mask <<= 1;
 
       /* Every 8 bits put a spacer */
       if (!(bit_cnt % 8)) { 
-         bit_flag++; 
+         bit_map++; 
          mask = 0x01;
          printf (" ");
       }
@@ -130,16 +130,16 @@ int any_bit_set (unsigned char *dbg_flag, size_t n_bytes)
 
 int main (void)
 {
-  unsigned char *bit_flag    = NULL;
+  unsigned char *bit_map    = NULL;
   unsigned long  n_bits       = 75;
 
   /*
    * Get enough bytes to hold all the bits of the num_dsl.
    */
   n_bytes = (n_bits + 7)/8;
-  bit_flag = (char *)malloc(n_bytes); 
-  if (bit_flag) 
-     memset(bit_flag, 0, n_bytes);
+  bit_map = (char *)malloc(n_bytes); 
+  if (bit_map) 
+     memset(bit_map, 0, n_bytes);
   else 
      return -1;
  
@@ -147,89 +147,89 @@ int main (void)
    * Set a few bit positions randomly to test the bits.
    */
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
-  printf("Atleast one bit set ? %d\n", any_bit_set(bit_flag, n_bytes));
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
+  printf("Atleast one bit set ? %d\n", any_bit_set(bit_map, n_bytes));
 
-  set_bit(bit_flag, 0);
+  set_bit(bit_map, 0);
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
-  printf("Atleast one bit set ? %d\n", any_bit_set(bit_flag, n_bytes));
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
+  printf("Atleast one bit set ? %d\n", any_bit_set(bit_map, n_bytes));
 
-  set_bit(bit_flag, 9);
+  set_bit(bit_map, 9);
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
-  printf("Atleast one bit set ? %d\n", any_bit_set(bit_flag, n_bytes));
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
+  printf("Atleast one bit set ? %d\n", any_bit_set(bit_map, n_bytes));
 
-  set_bit(bit_flag, 13);
+  set_bit(bit_map, 13);
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
-  printf("Atleast one bit set ? %d\n", any_bit_set(bit_flag, n_bytes));
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
+  printf("Atleast one bit set ? %d\n", any_bit_set(bit_map, n_bytes));
 
-  set_bit(bit_flag, 73);
+  set_bit(bit_map, 73);
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
 
-  show_bits(bit_flag, 1);
-  show_bits(bit_flag, n_bits);
-  show_bits(bit_flag, 72);
+  show_bits(bit_map, 1);
+  show_bits(bit_map, n_bits);
+  show_bits(bit_map, 72);
 
-  clear_bit(bit_flag, 0);
+  clear_bit(bit_map, 0);
 
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
-  printf("Atleast one bit set ? %d\n", any_bit_set(bit_flag, n_bytes));
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
+  printf("Atleast one bit set ? %d\n", any_bit_set(bit_map, n_bytes));
 
-  clear_bit(bit_flag, 9);
+  clear_bit(bit_map, 9);
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
-  printf("Atleast one bit set ? %d\n", any_bit_set(bit_flag, n_bytes));
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
+  printf("Atleast one bit set ? %d\n", any_bit_set(bit_map, n_bytes));
 
-  clear_bit(bit_flag, 13);
+  clear_bit(bit_map, 13);
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
-  printf("Atleast one bit set ? %d\n", any_bit_set(bit_flag, n_bytes));
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
+  printf("Atleast one bit set ? %d\n", any_bit_set(bit_map, n_bytes));
 
-  clear_bit(bit_flag, 73);
+  clear_bit(bit_map, 73);
   printf("Bit->Val:  0->%d 9->%d 13->%d 73->%d\n",
-          test_bit(bit_flag, 0), 
-          test_bit(bit_flag, 9), 
-          test_bit(bit_flag, 13), 
-          test_bit(bit_flag, 73)); 
-  printf("Atleast one bit set ? %d\n", any_bit_set(bit_flag, n_bytes));
+          test_bit(bit_map, 0), 
+          test_bit(bit_map, 9), 
+          test_bit(bit_map, 13), 
+          test_bit(bit_map, 73)); 
+  printf("Atleast one bit set ? %d\n", any_bit_set(bit_map, n_bytes));
 	
-  memset (bit_flag, 0, n_bytes);
-  set_n_bits (bit_flag, n_bits);	
-  printf("dsl 73 bit set ? %d\n", test_bit(bit_flag, 73));
-  printf("dsl 74 bit set ? %d\n", test_bit(bit_flag, 74));
-  printf("dsl 75 bit set ? %d\n", test_bit(bit_flag, 75));
-  printf("dsl 76 bit set ? %d\n", test_bit(bit_flag, 76));
-  printf("dsl 77 bit set ? %d\n", test_bit(bit_flag, 77));
-  printf("dsl 78 bit set ? %d\n", test_bit(bit_flag, 78));
-  printf("dsl 79 bit set ? %d\n", test_bit(bit_flag, 79));
-  printf("dsl 80 bit set ? %d\n", test_bit(bit_flag, 80));
+  memset (bit_map, 0, n_bytes);
+  set_n_bits (bit_map, n_bits);	
+  printf("dsl 73 bit set ? %d\n", test_bit(bit_map, 73));
+  printf("dsl 74 bit set ? %d\n", test_bit(bit_map, 74));
+  printf("dsl 75 bit set ? %d\n", test_bit(bit_map, 75));
+  printf("dsl 76 bit set ? %d\n", test_bit(bit_map, 76));
+  printf("dsl 77 bit set ? %d\n", test_bit(bit_map, 77));
+  printf("dsl 78 bit set ? %d\n", test_bit(bit_map, 78));
+  printf("dsl 79 bit set ? %d\n", test_bit(bit_map, 79));
+  printf("dsl 80 bit set ? %d\n", test_bit(bit_map, 80));
 }
 
