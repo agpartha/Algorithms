@@ -33,7 +33,7 @@
 
 int get()
 {
-    static i = 1;
+    static unsigned int i = 1;
     return i++;
 }
 
@@ -42,6 +42,6 @@ int main(int argc, char *argv[])
     get();
     get();
     get();
-    printf("%d %d %d\n", get(), get(), get());
+    printf("%d %d %d %d %d %d \n", 1, 2, get(), 3, get() + 10, get());
     return 0;
 }
