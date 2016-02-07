@@ -29,24 +29,27 @@
  */
 
 #include <stdio.h>
+#include <stddef.h>
+#include <arpa/inet.h>
 
 typedef struct btest_{
-    unsigned int drop:2;
-    unsigned int if_index:6;
-    unsigned int rest:24;
+    uint32_t drop:2;
+    uint32_t if_index:6;
+    uint32_t rest:24;
 } btest_t;
 
 
 int main (int argc, char **argv)
 {
 
-    unsigned int test_val = 0xAABBCCDD;
+    uint32_t test_val = htonl(0xAABBCCDD);
     btest_t      btest_val;
-    unsigned int *tptr = (unsigned int *)&btest_val;
+    uint32_t *tptr = (uint32_t *)&btest_val;
 
     *tptr = test_val;
     
-    printf("drop %d(0x%x) if_index %d(0x%x) rest %d (0x%x)\n",
+    printf("uint32_t %u (0x%x) drop %d(0x%x) if_index %d(0x%x) rest %d (0x%x)\n",
+	    *tptr, test_val,
             btest_val.drop, btest_val.drop, btest_val.if_index, btest_val.if_index,
             btest_val.rest, btest_val.rest);
 }
