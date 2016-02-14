@@ -25,38 +25,33 @@ int b_search (int data[], int size, int val)
 
 		// check and return if we have the match
 		if (data[m] == val) {
-				recurs--;
 				return m;
 		}
 
-		// if we are the single element, 
-		if (s == e) {
-				recurs--;
+		// if we have atleast two elements to check...
+		if (s < e) {
+				// If data is less than mod, go search from left section
+				// Cannot add if the index was negative still.
+				if (val < data[m]) {
+						int r;
+
+						recurs++;
+						r =  b_search(&data[s], (m - s), val);
+						if (r >= 0)
+								return s + r;
+				}  
+
+				// data must be greater than mid value and so look in the right side.
+				if (val > data[m]) {
+						int r;
+
+						recurs++;
+						r =  b_search(&data[m + 1], (e - m), val);
+						if (r >= 0)
+								return m + 1 + r;
+				}  
+		} 
 				return -1;
-		}
-
-		// If data is less than mod, go search from left section
-		// Cannot add if the index was negative still.
-		if (val < data[m]) {
-				int r;
-
-				recurs++;
-				r =  b_search(&data[s], (m - s), val);
-				if (r >= 0)
-						return s + r;
-		}  
-
-		// data must be greater than mid value and so look in the right side.
-		if (val > data[m]) {
-				int r;
-
-				recurs++;
-				r =  b_search(&data[m + 1], (e - m), val);
-				if (r >= 0)
-						return m + 1 + r;
-		}  
-
-		return -1;
 }
 
 
@@ -72,7 +67,7 @@ void main (void)
 						data[i] = data[i] + (rand() % 2321);
 						i++;
 				}
-			
+
 				qsort(data, sizeof(data)/sizeof(data[0]), sizeof(data[0]), comp_int);
 
 				i = 0;
