@@ -29,23 +29,26 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 int main (int argc, char **argv)
 {
     
     const char string_test[] = "Hello World";
-    char *p = string_test;
+	// With cast we can override the const usage, but compiler can warn without cast.
+	//char *p = (char *)string_test;
+	char *p = string_test;
 
-    printf("String: %s Length %d\n", p, strlen(string_test));
+    printf("String: %s Length %zu\n", p, strlen(string_test));
     
+	// Direct access to const is prevented by compiler with error.
+	//string_test[0] = 'Y';
     *p = 'Y';
 
-    printf("String: %s Length %d\n", p, strlen(string_test));
-    
     p = string_test+1;
 
     *p = 'T';
 
-    printf("String: %s Length %d\n", p, strlen(string_test));
+    printf("String: %s Length %zu\n", string_test, strlen(string_test));
     
 }
