@@ -5,11 +5,11 @@
 
 int comp_int (const void *a, const void *b)
 {
-	if (*((int *)a) == *((int *)b))
-		return 0;
-	else if (*((int *)a) < *((int *)b))
-		return -1;
-	return 1;
+		if (*((int *)a) == *((int *)b))
+				return 0;
+		else if (*((int *)a) < *((int *)b))
+				return -1;
+		return 1;
 }
 
 int b_search (int data[], int size, int val)
@@ -51,7 +51,7 @@ int b_search (int data[], int size, int val)
 								return m + 1 + r;
 				}  
 		} 
-				return -1;
+		return -1;
 }
 
 

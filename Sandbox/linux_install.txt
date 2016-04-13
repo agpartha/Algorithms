@@ -1,0 +1,29 @@
+
+libpcap:
+
+Solution:
+Install libpcap-dev package. libpcap install fails,
+
+sudo apt-get install libpcap-dev
+....
+user@ubuntu:/$ whereis pcap
+pcap: /usr/include/pcap.h /usr/include/pcap /usr/share/man/man3/pcap.3pcap.gz
+
+
+Issue:
+user@ubuntu:~/gDocuments/code/C-Snippets/Sandbox$ gcc -o ldev ldev.c -lpcap
+ldev.c:12:46: fatal error: pcap.h: No such file or directory
+
+user@ubuntu:~/gDocuments/code/C-Snippets/Sandbox$ whereis pcap.h
+pcap:
+
+user@ubuntu:/$ sudo apt-get libpcap
+[sudo] password for user: 
+E: Invalid operation libpcap
+
+
+----------------------------------ooOOOOoo---------------------------------------
+
+
+
+
