@@ -26,6 +26,44 @@ E: Invalid operation libpcap
 
 ----------------------------------ooOOOOoo---------------------------------------
 
+pcap_open_live:
+
+unable to cpature as non root user.
+
+Solution:
+
+Do the following as root
+
+Add a capture group and add yourself to it
+
+groupadd pcap
+usermod -a -G pcap user
+Next, change the group of tcpdump and set permissions
+
+chgrp pcap /usr/sbin/tcpdump
+chmod 750 /usr/sbin/tcpdump
+Finally, use setcap to give tcpdump the necessary permissions
+
+setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
+Be careful, that this will allow everybody from the group pcap to manipulate network interfaces and read raw packets!
+
+
+http://askubuntu.com/questions/530920/tcpdump-permissions-problem
+
+More details from
+
+http://peternixon.net/news/2012/01/28/configure-tcpdump-work-non-root-user-opensuse-using-file-system-capabilities/
+
+Issue:
+
+DEV: eno16777736
+pcap_open_live(): eno16777736: You don't have permission to capture on that device (socket: Operation not permitted)
+
+
+
+
+----------------------------------ooOOOOoo---------------------------------------
+
 git:
 
 Unable to push after two factor authentication enabled.
