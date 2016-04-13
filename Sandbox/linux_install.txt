@@ -39,12 +39,18 @@ You may also need to update the origin for your repository if set to https:
 
 git remote -v 
 git remote remove origin 
-git remote add origin git@github.com:user/repo.git  
+// Did not work : git remote add origin git@github.com:user/repo.git  
 
-	
 you can also do git remote add origin https://username:access-token@github.com/username/repo.git to store your personal access token. 
 
-https://help.github.com/articles/caching-your-github-password-in-git/
+// Did not work: https://help.github.com/articles/caching-your-github-password-in-git/
 
+git remote set-url origin https://github.com/zkirkland/Random-Python-Tests.git
+This one works. But after wards you need to add 
+git push --set-upstream origin master
+
+may have to do git pull origin master 
+
+try git branch and git pull commands to see if they are fine and test with git remote -v
 
 
