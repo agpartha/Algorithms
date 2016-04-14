@@ -60,8 +60,21 @@ DEV: eno16777736
 pcap_open_live(): eno16777736: You don't have permission to capture on that device (socket: Operation not permitted)
 
 
+----------------------------------ooOOOOoo---------------------------------------
+
+wireshark:
+sudo apt-get install wireshark
+sudo groupadd wireshark
+sudo usermod -a -G wireshark YOUR_USER_NAME
+sudo chgrp wireshark /usr/bin/dumpcap
+sudo chmod 750 /usr/bin/dumpcap
+sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap
+sudo getcap /usr/bin/dumpcap
+
+https://ask.wireshark.org/questions/16343/install-wireshark-on-ubuntu
 
 
+----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
 
 git:
