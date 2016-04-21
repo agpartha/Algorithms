@@ -139,4 +139,144 @@ reboot
 
 
 ----------------------------------ooOOOOoo---------------------------------------
+Xterm:
+
+http://scarygliders.net/2011/12/01/customize-xterm-the-original-and-best-terminal/
+
+Introducing the .Xresources file.
+
+and issue the following command.
+xrdb -merge ~/.Xresources
+
+Using this handy file, which you save in your home directory, you just plug in whatever you wish to customize your xterm sessions with.
+
+Here’s my current .Xresources file contents…
+
+xterm*faceName: DejaVu Sans Mono Book
+xterm*faceSize: 11
+
+! Every shell is a login shell by default (for inclusion of all necessary environment variables)
+xterm*loginshell: true
+
+! I like a LOT of scrollback...
+xterm*savelines: 16384
+
+! double-click to select whole URLs :D
+xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+
+! DOS-box colours...
+xterm*foreground: rgb:a8/a8/a8
+xterm*background: rgb:00/00/00
+xterm*color0: rgb:00/00/00
+xterm*color1: rgb:a8/00/00
+xterm*color2: rgb:00/a8/00
+xterm*color3: rgb:a8/54/00
+xterm*color4: rgb:00/00/a8
+xterm*color5: rgb:a8/00/a8
+xterm*color6: rgb:00/a8/a8
+xterm*color7: rgb:a8/a8/a8
+xterm*color8: rgb:54/54/54
+xterm*color9: rgb:fc/54/54
+xterm*color10: rgb:54/fc/54
+xterm*color11: rgb:fc/fc/54
+xterm*color12: rgb:54/54/fc
+xterm*color13: rgb:fc/54/fc
+xterm*color14: rgb:54/fc/fc
+xterm*color15: rgb:fc/fc/fc
+
+! right hand side scrollbar...
+xterm*rightScrollBar: true
+xterm*ScrollBar: true
+
+! stop output to terminal from jumping down to bottom of scroll again
+xterm*scrollTtyOutput: false
+
+
+
+----------------------------------ooOOOOoo---------------------------------------
+OVS
+
+Adding new port to a bridge
+
+sudo modprobe dummy
+ip link setup dummy0
+ip link set up dummy0
+sudo ip link set up dummy0
+sudo ovs-vsctl add-port s2 dummy0
+sudo ovs-ctl show
+
+Adding Mirror with all ports to a tap interface
+sudo ovs-vsctl -- --id=@s2e2 get Port s2-eth2 -- --id=@m create Mirror name=tap select-all=true output-port=@s2e1 -- set bridge s2 mirrors=@m
+
+Adding Mirror with a tap port and ignore any other ports inthe mirror
+sudo ovs-vsctl -- --id=@m create mirror name=tap -- add bridge s2 mirrors @m -- --id=@p1 get port s2-eth3 -- --id=@p2 get port s2-eth4 -- --id=@tap get port s2-eth1 -- set mirror tap 'select_src_port=[@p1, @p2]' 'select_dst_port=[@p1, @p2]' -- set mirror tap output-port=@tap 
+
+sudo ovs-vsctl list bridge s2
+sudo ovs-vsctl list mirror tap
+
+to remove a mirror 
+sudo ovs-vsctl -- --id=@m get mirror tap -- remove bridge s2 mirrors @m
+
+to remove all mirrors from a bridge
+sudo ovs-vsctl clear bridge s2 mirrors
+
+
+
+----------------------------------ooOOOOoo---------------------------------------
+
+Mininet:
+
+Create a topology by including the needed topology from the base topology as python class into the python script and choosing the same at startup.
+
+tap topology file:
+
+class mLinearTopo( Topo ):
+    "Linear topology of k switches, with n hosts per switch."
+
+    def build( self, k=2, n=1, **_opts):
+        """k: number of switches
+           n: number of hosts per switch"""
+        self.k = k
+        self.n = n
+
+        if n == 1:
+            genHostName = lambda i, j: 'h%s' % i
+        else:
+            genHostName = lambda i, j: 'h%ss%d' % ( j, i )
+
+        lastSwitch = None
+        for i in irange( 1, k ):
+            # Add switch
+            switch = self.addSwitch( 's%s' % i )
+            # Add hosts to switch
+            for j in irange( 1, n ):
+                host = self.addHost( genHostName( i, j ) )
+                self.addLink( host, switch )
+                if i == 2:
+                        print("Adding Second link for Switch 2 only")
+                        self.addLink( host, switch )
+            # Connect switch to previous
+            if lastSwitch:
+                self.addLink( switch, lastSwitch )
+            lastSwitch = switch
+
+
+Changes in the mn copy to run mininet:
+from topo import mLinearTopo
+TOPOS = { 'minimal': MinimalTopo,
+          'linear': LinearTopo,
+          'reversed': SingleSwitchReversedTopo,
+          'single': SingleSwitchTopo,
+          'tree': TreeTopo,
+          'torus': TorusTopo,
+          'mlinear' : mLinearTopo }
+
+
+mininet> xterm h1
+mininet> xterm h2
+mininet> xterm h3
+mininet> h3 python -m SimpleHTTPServer 80 &
+mininet> h1 curl -I 10.0.0.3
+mininet> h1 ping h3
+
 ----------------------------------ooOOOOoo---------------------------------------
