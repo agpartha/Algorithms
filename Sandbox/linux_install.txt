@@ -297,12 +297,24 @@ ab -n 500 -c 20 http://www.example.com/
 
 while :; do clear; your_command; sleep 2; done
 
+----------------------------------ooOOOOoo---------------------------------------
 
+Simple webserver options 
 
+while :; do nc -l 80 < simple_page.html ; done
 
+simple HTML file
 
+<!DOCTYPE html>
+<html>
+<body>
 
+<h1>My First Heading</h1>
 
+<p>My first paragraph.</p>
+
+</body>
+</html>
 
 ----------------------------------ooOOOOoo---------------------------------------
-----------------------------------ooOOOOoo---------------------------------------
+
