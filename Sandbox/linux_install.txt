@@ -280,3 +280,29 @@ mininet> h1 curl -I 10.0.0.3
 mininet> h1 ping h3
 
 ----------------------------------ooOOOOoo---------------------------------------
+
+curl, repeated commands for bash
+
+curl -I "10.0.0.3"
+
+for (( ; ; )) ; do curl -I "10.0.0.3" ; done
+
+for((i=0;i<100;i++)) do curl --connect-timeout 3 'http://www.google.com'; done;
+
+for i in `seq 1 20`; do curl http://url; done
+
+for i in $(seq 1 20); do curl "http://url"; done
+
+ab -n 500 -c 20 http://www.example.com/
+
+while :; do clear; your_command; sleep 2; done
+
+
+
+
+
+
+
+
+----------------------------------ooOOOOoo---------------------------------------
+----------------------------------ooOOOOoo---------------------------------------
