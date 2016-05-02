@@ -318,3 +318,41 @@ simple HTML file
 
 ----------------------------------ooOOOOoo---------------------------------------
 
+kernel source for ubuntu
+
+# First one installs headers for the image kernel
+sudo apt-get source linux-image-$(uname -r)
+# This installs the source for the image kernel
+sudo apt-get install linux-source
+
+# This may be needed 
+sudo apt-get install libssl-dev
+
+
+# After this if needed to allow kernel to be modified, do the following 
+# per netmap instructions
+*** kernel not configured.
+*** 
+*** The kernel directory must be ready for external module compilation.
+*** You may need to issue the following or equivalent commands:
+*** 
+***     cd /usr/src/linux-headers-4.4.0-21
+***     make oldconfig
+***     make modules_prepare
+***
+***
+***     Current configuration values:
+***
+*** kernel directory            /usr/src/linux-headers-4.4.0-21
+*** linux version               - 
+*** module file                 netmap.ko
+*** subsystems                  generic monitor pipe vale
+*** kernel sources              /usr/src/linux-source-4.4.0
+*** requested drivers           i40e ixgbe igb e1000e e1000 veth.c forcedeth.c virtio_net.c r8169.c
+
+
+
+
+https://wiki.ubuntu.com/Kernel/SourceCode
+
+
