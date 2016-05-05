@@ -78,6 +78,11 @@ https://ask.wireshark.org/questions/16343/install-wireshark-on-ubuntu
 
 git:
 
+Once two factor authentication is enabled for password use the token when doing git operations using https.
+
+https://help.github.com/articles/caching-your-github-password-in-git/
+
+
 Unable to push after two factor authentication enabled.
 
 http://stackoverflow.com/questions/17659206/git-push-results-in-authentication-failed
@@ -281,6 +286,13 @@ mininet> h1 ping h3
 
 ----------------------------------ooOOOOoo---------------------------------------
 
+curl programmatic compile dependencies.
+
+sudo apt-get install libcurl4-openssl-dev
+
+http://stackoverflow.com/questions/11471690/curl-h-no-such-file-or-directory
+
+
 curl, repeated commands for bash
 
 curl -I "10.0.0.3"
@@ -477,5 +489,36 @@ Link up/down
 
 ifconfig eth0 up
 ifconfig eth0 down
+----------------------------------ooOOOOoo---------------------------------------
+adding users
+
+sudo useradd -d /home/<username> -m <username>
+
+sudo passwd <username>
+
+sudo chsh -s /bin/bash <username>
+
+sudo adduser <username> sudo
+
+
+http://www.howtogeek.com/howto/ubuntu/add-a-user-on-ubuntu-server/
+
+https://help.ubuntu.com/lts/serverguide/user-management.html
+
+http://askubuntu.com/questions/325807/arrow-keys-tab-complete-not-working
+
+http://askubuntu.com/questions/7477/how-can-i-add-a-new-user-as-sudoer-using-the-command-line
+
+----------------------------------ooOOOOoo---------------------------------------
+Setting prompt to include user name and path 
+
+export PS1='$(whoami)@$(hostname):$(pwd)$ '
+export PS1='$(whoami)@${HOSTNAME%%.*} [$(pwd)]# '
+
+
+
+http://superuser.com/questions/601181/how-to-display-current-path-in-command-prompt-in-linuxs-sh-not-bash
+
+
 ----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
