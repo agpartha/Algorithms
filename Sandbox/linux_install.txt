@@ -356,3 +356,126 @@ sudo apt-get install libssl-dev
 https://wiki.ubuntu.com/Kernel/SourceCode
 
 
+
+----------------------------------ooOOOOoo---------------------------------------
+disk cleanup ubuntu
+
+sudo apt-get clean
+sudo apt-get autoclean
+sudo apt-get autoremove
+sudo apt-get remove --purge linux-image-X.X.XX-XX-generic
+sudo apt-get remove --purge linux-image-X.X.XX-XX-generic
+dpkg --get-selections | grep linux-image
+
+du -sk * | sort -nr | head -10
+
+ls -lh /boot
+
+show top 10 biggest subdirs in the current dir.
+du -sk * | sort -nr | head -10
+
+use filelight or kDirStat to see where the disk space is going visually
+check if you have old kernels for deletion
+ls -lh /boot
+
+cleaning packages
+sudo apt-get autoremove
+
+sudo apt-get autoclean
+
+see list of all installed packages, sorted by size. If you see something big and don't use it - uninstall it
+
+dpkg-query -W --showformat='${Installed-Size} ${Package}\n' | sort -nr | less
+
+clean unused language files with translations (there are tons of them)
+sudo apt-get install localepurge
+
+check content of /var/tmp/
+du -sh /var/tmp/
+
+check also
+man deborphan
+
+Search for big files:
+find / -type f -size +1024k
+
+or
+
+find / -size +50000  -exec ls -lahg {} \;
+
+
+uname -r
+to check your current version, then
+
+dpkg -l linux-image-* linux-headers-*
+to see all the old kernels and header files, then
+
+sudo apt-get remove linux-image-<XYZ> linux-headers-<XYZ>
+the apt-get remove command supports wildcards, so you can do apt-get remove linux-image 3.0.* linux-headers-3.0.* for example, to get rid of many at once.
+
+
+Remove all old kernel versions automatically
+Attention: If you've just upgraded the kernel, reboot before deleting the older versions!
+Remember to check which kernel you are using type:
+
+uname -r
+Then as root:
+
+sudo apt-get remove --purge $(dpkg -l 'linux-*' | sed '/^ii/!d;/'"$(uname -r | sed "s/\(.*\)-\([^0-9]\+\)/\1/")"'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d')
+read that thread to be safe not to remove needed kernels with this command!
+
+
+sudo du -h /var/log
+Or as rubo77 points out in commends, you could use the NCurses disk usage tool:
+
+sudo ncdu /var/log
+
+
+http://askubuntu.com/questions/5980/how-do-i-free-up-disk-space
+
+----------------------------------ooOOOOoo---------------------------------------
+Identifying the NIC card in ubuntu
+
+lspci | awk '/net/ {print $1}' | xargs -i% lspci -ks %
+00:03.0 Ethernet controller: Intel Corporation 82540EM Gigabit Ethernet Controller (rev 02)
+	Subsystem: Intel Corporation PRO/1000 MT Desktop Adapter
+	Kernel driver in use: e1000
+	Kernel modules: e1000
+.....
+
+05:00.0 Ethernet controller: Intel Corporation I210 Gigabit Network Connection (rev 03)
+	Subsystem: Super Micro Computer Inc Device 1533
+	Kernel driver in use: igb
+
+lspci | grep -i net
+
+sudo ls /sys/class/net
+
+----------------------------------ooOOOOoo---------------------------------------
+virtualenv error on virtualbox 
+
+virtualenv --always-copy testenv
+
+https://github.com/pypa/virtualenv/issues/209
+
+later ffi.h error for pip install
+
+sudo apt-get update
+sudo apt-get install libffi-dev g++ libssl-dev
+
+https://github.com/bigchaindb/bigchaindb/issues/24
+
+----------------------------------ooOOOOoo---------------------------------------
+Getting X window applications from remote headless server without Desktop installed on the server
+
+ssh -XC user@192.168.10.140
+
+http://askubuntu.com/questions/163155/how-do-i-access-my-remote-ubuntu-server-via-x-windows-from-my-mac
+
+----------------------------------ooOOOOoo---------------------------------------
+Link up/down
+
+ifconfig eth0 up
+ifconfig eth0 down
+----------------------------------ooOOOOoo---------------------------------------
+----------------------------------ooOOOOoo---------------------------------------
