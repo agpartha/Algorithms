@@ -64,6 +64,8 @@ pcap_open_live(): eno16777736: You don't have permission to capture on that devi
 
 wireshark:
 sudo apt-get install wireshark
+
+# Allowing non super users to capture the packets
 sudo groupadd wireshark
 sudo usermod -a -G wireshark $USER
 sudo chgrp wireshark /usr/bin/dumpcap
@@ -71,7 +73,20 @@ sudo chmod 750 /usr/bin/dumpcap
 sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap
 sudo getcap /usr/bin/dumpcap
 
+# Wireshark display filter
+ip.addr == 10.0.0.1 && ip.ttl == 111
+
+# using tshark with capture filter and printing summary to console and capturing full
+# packets to the file.
+sudo tshark -f "host 216.58.219.206" -i enp0s8 -w /tmp/ars.pcap -P
+
+# starting wireshark with a pcap file for analysis
+ sudo wireshark /tmp/ars.pcap "ip.addr == 216.58.219.206"
+
+
 https://ask.wireshark.org/questions/16343/install-wireshark-on-ubuntu
+https://wiki.wireshark.org/CaptureFilters
+https://www.wireshark.org/docs/wsug_html_chunked/AppToolstshark.html
 
 
 ----------------------------------ooOOOOoo---------------------------------------
@@ -107,6 +122,73 @@ git push --set-upstream origin master
 may have to do git pull origin master 
 
 try git branch and git pull commands to see if they are fine and test with git remote -v
+
+https://confluence.atlassian.com/bitbucketserver/permanently-authenticating-with-git-repositories-776639846.html
+
+git config --global credential.helper 'cache --timeout 3600'
+git config --global color.ui true
+
+Check out a new repo
+git clone git://location/proj.git
+
+Actually see what’s going on
+gitk --all
+
+Interactive adding for commits
+git add -i
+
+Unstage changes
+git reset HEAD
+
+Return to last committed state
+git reset --hard
+
+Undo a merge
+git reset --hard [ID]
+git reset --hard HEAD~[number back]
+
+Undo a commit with message
+git reset --soft HEAD^
+
+Modify a commit
+git commit --amend
+
+Add more files to existing commit
+git add ...
+git commit --amend -C HEAD
+
+Branches have diverged – just get up stream
+git reset --hard @{upstream}
+
+Checkout specific version of a file
+git checkout [ID] [FILE]
+
+Updating submodules
+git submodule init
+git submodule sync
+git submodule update
+
+Go through every submodule and checkout the head
+git submodule foreach git checkout master
+git submodule foreach git pull origin master
+Or automatically merge
+git submodule update --merge
+
+Show difference between two branches
+git diff [BRANCH 1]..[BRANCH 2]
+
+Difference between two commits
+git diff [ID1] [ID2]
+
+Merge a branch back into master
+git checkout master
+git merge [BRANCH]
+
+Show all branches
+git branch --all
+
+Checkout and track remote branch
+git checkout -t [BRANCH]
 
 
 ----------------------------------ooOOOOoo---------------------------------------
@@ -332,6 +414,10 @@ simple HTML file
 
 kernel source for ubuntu
 
+Kernel Doxygen
+http://kerneldox.com/
+
+
 # First one installs headers for the image kernel
 sudo apt-get source linux-image-$(uname -r)
 # This installs the source for the image kernel
@@ -367,6 +453,22 @@ sudo apt-get install libssl-dev
 
 https://wiki.ubuntu.com/Kernel/SourceCode
 
+To enable dev_dbg messages in a specific kernel file:
+
+#define DEBUG
+before including <linux/device.h>
+
+printk("%s: The calling process is \"%s\" (pid %i)\n",
+        __FUNCTION__, current->comm, current->pid);
+
+Writing Linux Device Drivers
+
+The invaluable and comprehensive O’Reilly’s Linux Device Drivers book. The 3rd edition is for the 2.6 kernel and can be downloaded from http://lwn.net/Kernel/LDD3/
+http://vger.kernel.org/~davem/skb_data.html – understanding skb’s for network drivers.
+http://kerneltrap.org/
+http://www.cs.utah.edu/dept/old/texinfo/glibc-manual-0.02/library_toc.html – the massive but descriptive GNU C library
+http://www.faqs.org/docs/kernel/index.html – Linux kernel module programming guide
+http://people.nl.linux.org/ftp/pub/anoncvs/kernelnewbies/documents/kdoc/kernel-api/linuxkernelapi.html – The Linux kernel API
 
 
 ----------------------------------ooOOOOoo---------------------------------------
@@ -385,6 +487,14 @@ ls -lh /boot
 
 show top 10 biggest subdirs in the current dir.
 du -sk * | sort -nr | head -10
+
+du –sh /var/cache/apt/archives
+
+# Run this and kill the process holding the files which are large.
+sudo lsof | grep '(deleted)'
+
+
+http://www.howtogeek.com/howto/28502/how-to-free-up-a-lot-of-disk-space-on-ubuntu-linux-by-deleting-cached-package-files/
 
 use filelight or kDirStat to see where the disk space is going visually
 check if you have old kernels for deletion
@@ -521,4 +631,138 @@ http://superuser.com/questions/601181/how-to-display-current-path-in-command-pro
 
 
 ----------------------------------ooOOOOoo---------------------------------------
+
+Search only c and h files including cpp
+
+alias grepch="grep --include=*.[ch] --include=*.cpp -nr"
+alias grepc="grep --include=*.[c] --include=*.cpp -nr"
+alias greph="grep --include=*.[h] -nr"
+
+https://austinmarton.wordpress.com/
+----------------------------------ooOOOOoo---------------------------------------
+
+Perform some operation in a loop from bash shell
+
+Perform some operation for every line in the output of a command, e.g. add .txt to every file in a directory:
+
+ls /var/* | while read fname; do cp $fname $fname.txt; done
+
+Instead of:
+
+for fname in `ls /var/*`; do cp $fname $fname.txt; done
+
+http://tldp.org/LDP/abs/html/string-manipulation.html
+
+----------------------------------ooOOOOoo---------------------------------------
+
+useful linux commands
+
+Check all running services
+ps xa
+
+Find a particular process
+ps xa | grep processName
+
+Kill a process
+kill -KILL processPID
+
+Close the current process
+ctrl + c
+
+Sleep a process
+ctrl + z
+
+Put the process to the background (where n is job number)
+bg %n
+
+Bring the process to the foreground (where n is job number)
+fg %n
+
+Show the list of current jobs
+jobs
+
+Search command history
+ctrl + r
+
+View a file page by page
+cat somefile | less
+
+Search for a file containing some string
+grep -lir "searchstring" ~/somedir/*
+
+Display the current path
+pwd
+
+Show kernel modules currently loaded
+lsmod
+
+Find a file
+locate file
+
+Create a gzip archive
+tar -czf output.tar.gz input files
+
+Secure copy from local to remote
+scp localfile username@servername:/home/username/
+
+Find all files that end in ‘.c’, contain the text “what i want” but not the text “what i dont”:
+find . -name "*.c" -exec grep -lR 'what/ i/ want' {} \; | xargs grep -L 'what/ i/ dont'
+
+Check all running services
+ps xa
+
+Find a particular process
+ps xa | grep processName
+
+Kill a process
+kill -KILL processPID
+
+Close the current process
+ctrl + c
+
+Sleep a process
+ctrl + z
+
+Put the process to the background (where n is job number)
+bg %n
+
+Bring the process to the foreground (where n is job number)
+fg %n
+
+Show the list of current jobs
+jobs
+
+Search command history
+ctrl + r
+
+View a file page by page
+cat somefile | less
+
+Search for a file containing some string
+grep -lir "searchstring" ~/somedir/*
+
+Display the current path
+pwd
+
+Show kernel modules currently loaded
+lsmod
+
+Find a file
+locate file
+
+Remount the filesystem in read/write
+mount -o remount,rw /
+
+Determine file type, architecture, etc:
+file somefile
+
+Search for sometext in a number of PDF files:
+ls *.pdf | xargs -I{} pdftotext {} - | grep "sometext"
+
+Read a binary file in hex:
+od -c filename | less
+
+----------------------------------ooOOOOoo---------------------------------------
+
+
 ----------------------------------ooOOOOoo---------------------------------------
