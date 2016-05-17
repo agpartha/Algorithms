@@ -307,6 +307,20 @@ sudo ovs-vsctl -- --id=@m get mirror tap -- remove bridge s2 mirrors @m
 to remove all mirrors from a bridge
 sudo ovs-vsctl clear bridge s2 mirrors
 
+To check ovs status
+service openvswitch-switch status
+sudo ovs-vsctl show
+sudo ovs-vsctl del-br
+
+To stop ovs from starting on bootup
+
+service openvswitch-switch stop
+
+To start
+service openvswitch-switch start
+
+
+
 
 
 ----------------------------------ooOOOOoo---------------------------------------
