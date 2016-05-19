@@ -778,5 +778,42 @@ od -c filename | less
 
 ----------------------------------ooOOOOoo---------------------------------------
 
+C pointer arithmetic and warnings.
 
+Compliant Solution
+Any valid pointer to void can be converted to intptr_t or uintptr_t and back with no change in value (see INT36-EX2). The C Standard guarantees that a pointer to void may be converted to or from a pointer to any object type and back again and that the result must compare equal to the original pointer. Consequently, converting directly from a char * pointer to a uintptr_t, as in this compliant solution, is allowed on implementations that support the uintptr_t type.
+
+#include <stdint.h>
+ 
+void f(void) {
+  char *ptr;
+  /* ... */
+  uintptr_t number = (uintptr_t)ptr; 
+  /* ... */
+}
+
+----------------------------------ooOOOOoo---------------------------------------
+
+C packing and alignment 
+
+typedef struct
+{
+     char Data1;
+     int Data2;
+     unsigned short Data3;
+     char Data4;
+
+}__attribute__((packed, aligned(1))) sSampleStruct;  
+
+
+http://stackoverflow.com/questions/11770451/what-is-the-meaning-of-attribute-packed-aligned4?rq=1
+
+why you should not 
+
+http://digitalvampire.org/blog/index.php/2006/07/31/why-you-shouldnt-use-__attribute__packed/
+
+http://www.catb.org/esr/structure-packing/
+
+
+----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
