@@ -837,4 +837,31 @@ http://www.catb.org/esr/structure-packing/
 
 
 ----------------------------------ooOOOOoo---------------------------------------
+changing hostname 
+
+Ubuntu change hostname command
+
+
+sudo hostname <new_name> 
+
+but if that name is not known in /etc/hosts need to add an entry for 127.0.0.1 along with localhost to map to <new_name>
+
+
+The procedure to change the computer name on Ubuntu Linux:
+
+Type the following command to edit /etc/hostname using nano or vi text editor:
+sudo nano /etc/hostname
+
+Delete the old name and setup new name.
+Next Edit the /etc/hosts file:
+sudo nano /etc/hosts
+This file contains the hostname, if not chaning for some reason go ahead and modify this file.
+sudo nano /etc/hostname
+
+Replace any occurrence of the existing computer name with your new one.
+Reboot the system to changes take effect:
+sudo reboot
+
+http://www.cyberciti.biz/faq/ubuntu-change-hostname-command/
+
 ----------------------------------ooOOOOoo---------------------------------------
