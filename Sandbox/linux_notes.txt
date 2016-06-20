@@ -125,7 +125,7 @@ try git branch and git pull commands to see if they are fine and test with git r
 
 https://confluence.atlassian.com/bitbucketserver/permanently-authenticating-with-git-repositories-776639846.html
 
-git config --global credential.helper 'cache --timeout 3600'
+git config --global credential.helper 'cache --timeout 72000'
 git config --global color.ui true
 
 Check out a new repo
@@ -864,4 +864,49 @@ sudo reboot
 
 http://www.cyberciti.biz/faq/ubuntu-change-hostname-command/
 
+----------------------------------ooOOOOoo---------------------------------------
+pip and boto, openssl and cherrypy
+
+sudo apt install python-pip
+pip install --upgrade pip
+sudo pip install boto
+sudo pip install pyopenssl
+sudo pip install pyOpenSSL
+sudo apt-get update
+sudo apt-get install libffi-dev g++ libssl-dev
+
+
+
+Installing
+CherryPy can be easily installed via common Python package managers such as setuptools or pip.
+
+$ easy_install cherrypy
+$ pip install cherrypy
+You may also get the latest CherryPy version by grabbing the source code from Github:
+
+$ git clone https://github.com/cherrypy/cherrypy
+$ cd cherrypy
+$ python setup.py install
+
+http://docs.cherrypy.org/en/latest/install.html
+
+----------------------------------ooOOOOoo---------------------------------------
+
+renewing dhcp ip address 
+
+sudo dhclient -r
+
+# For restarting networking in case of issues
+sudo /etc/init.d/networking restart
+
+http://www.howtogeek.com/168168/renew-dhcp-address-in-linux/
+----------------------------------ooOOOOoo---------------------------------------
+
+simple loops in bash
+
+for i in `seq 1 100000`; do  echo $i; curl -I "205.196.12.74"; done
+
+http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html
+ 
+----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
