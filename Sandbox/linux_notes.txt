@@ -909,4 +909,23 @@ for i in `seq 1 100000`; do  echo $i; curl -I "205.196.12.74"; done
 http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html
  
 ----------------------------------ooOOOOoo---------------------------------------
+
+Buring an ISO image on MAC osX
+
+Convert the iso to dmg image
+
+hdiutilconvert -format UDRW -o /path/to/target.img /path/to/ubuntu.iso
+
+diskutil list
+
+find the disk by removing and repeating and inserting and repeating the command to ensure the right drive is selected.
+
+if disk3 is selected you can proceed to burn the dmg as follows
+
+sudo dd if=/path/to/ubuntu-14.04-desktop-i386.dmg of=/dev/rdiskN bs=1m
+
+where rdiskN will be rdisk3 for disk3. r is required part of the name.
+
+http://computers.tutsplus.com/tutorials/how-to-create-a-bootable-ubuntu-usb-drive-for-pc-on-a-mac--cms-21187
+
 ----------------------------------ooOOOOoo---------------------------------------
