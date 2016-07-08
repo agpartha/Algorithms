@@ -914,7 +914,7 @@ Buring an ISO image on MAC osX
 
 Convert the iso to dmg image
 
-hdiutilconvert -format UDRW -o /path/to/target.img /path/to/ubuntu.iso
+hdiutil convert -format UDRW -o /path/to/target.img /path/to/ubuntu.iso
 
 diskutil list
 
@@ -927,5 +927,14 @@ sudo dd if=/path/to/ubuntu-14.04-desktop-i386.dmg of=/dev/rdiskN bs=1m
 where rdiskN will be rdisk3 for disk3. r is required part of the name.
 
 http://computers.tutsplus.com/tutorials/how-to-create-a-bootable-ubuntu-usb-drive-for-pc-on-a-mac--cms-21187
+
+If facing an error resource busy....
+
+try this and repeat the dd command 
+
+sudo diskutil unmountDisk /dev/disk2
+
+http://raspberrypi.stackexchange.com/questions/9217/resource-busy-error-when-using-dd-to-copy-disk-img-to-sd-card
+
 
 ----------------------------------ooOOOOoo---------------------------------------
