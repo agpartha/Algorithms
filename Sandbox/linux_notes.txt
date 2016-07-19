@@ -938,3 +938,44 @@ http://raspberrypi.stackexchange.com/questions/9217/resource-busy-error-when-usi
 
 
 ----------------------------------ooOOOOoo---------------------------------------
+
+mounting usb drives in ubuntu
+
+Step 1. Check the blockdevices and the file systems that are assigned to those block devices.
+
+lsblk
+
+
+Here you see the blokdevice sdb with partition /sdb1. But it's not mounted. There's no file assigned to it.
+
+Step 2. What kind of device is sdb?
+
+sudo lshw 
+or
+
+sudo lshw | less
+
+
+So the USB stick - the block device /sdb - has the logical name /dev/sdb. And the FAT32 filesystem on that stick has the logical name /dev/sdb1.
+
+Step 3. Mounting the USB-stick
+
+We will mount /dev/sdb1 to /media/usbstick
+
+sudo mkdir /media/usbstick
+
+sudo mount -t vfat /dev/sdb1 /media/usbstick 
+Read the manpage of mount for other options.
+
+Step 4. Did it work?
+
+lsblk
+
+Yes, we can see that the filesystem on the USB stick is mounted to /media/usbstick
+
+Addendum : if there are no logical names like /dev/sdb, you should first create them. See this information about setting up and controling loop devices with the losetup command
+
+http://askubuntu.com/questions/285539/detect-and-mount-devices
+
+
+----------------------------------ooOOOOoo---------------------------------------
