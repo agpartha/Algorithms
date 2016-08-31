@@ -979,3 +979,17 @@ http://askubuntu.com/questions/285539/detect-and-mount-devices
 
 
 ----------------------------------ooOOOOoo---------------------------------------
+cronjab using commandline 
+
+crontab -l | { cat; echo "0 0 0 0 0 some entry"; } | crontab -
+
+
+command="php $INSTALL/indefero/scripts/gitcron.php"
+job="0 0 * * 0 $command"
+cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
+
+
+http://stackoverflow.com/questions/878600/how-to-create-cronjob-using-bash
+
+----------------------------------ooOOOOoo---------------------------------------
+----------------------------------ooOOOOoo---------------------------------------
