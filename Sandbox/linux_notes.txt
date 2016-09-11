@@ -992,4 +992,111 @@ cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
 http://stackoverflow.com/questions/878600/how-to-create-cronjob-using-bash
 
 ----------------------------------ooOOOOoo---------------------------------------
+json parsing on command line like sed/awk
+
+https://stedolan.github.io/jq/
+
+
 ----------------------------------ooOOOOoo---------------------------------------
+cron.hourly scripts 
+
+A script ending with .sh is not executed in /etc/cron.hourly folder:
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=308911
+Links or binaries inside a directory handled by run-pars (like /etc/cron.daily) will not run if a period is part of their name.
+rename the script
+
+mv /etc/cron.hourly/Hour-sound.sh /etc/cron.hourly/Hour-sound
+or put the script-call into
+
+/etc/crontab
+which allows the .sh ending
+
+http://askubuntu.com/questions/611336/why-putting-a-script-in-etc-cron-hourly-is-not-working
+
+----------------------------------ooOOOOoo---------------------------------------
+date conversions
+
+for getting date in scripts 
+
+$(date -u)
+
+converting epoch to printable date 
+use the following example for the epoch value 1473353891
+
+administrator@:/tmp$ date --date '@1473353891'
+Thu Sep  8 16:58:11 UTC 2016
+
+----------------------------------ooOOOOoo---------------------------------------
+
+logrotate
+
+administrator@area1-fortify:/tmp$ sudo logrotate -df /etc/logrotate.d/fortify_updater 
+reading config file /etc/logrotate.d/fortify_updater
+
+Handling 1 logs
+
+rotating pattern: /var/log/area1_fortify_autoupdater_install.log  forced from command line (12 rotations)
+empty log files are not rotated, log files >= 104857600 are rotated earlier, old logs are removed
+switching euid to 0 and egid to 4
+considering log /var/log/area1_fortify_autoupdater_install.log
+  log needs rotating
+rotating log /var/log/area1_fortify_autoupdater_install.log, log->rotateCount is 12
+Converted ' "-%Y%m%d-%s"' -> '"-%Y%m%d-%s"'
+dateext suffix '"-20160908-1473353891"'
+glob pattern '"-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"'
+glob finding logs to compress failed
+glob finding old rotated logs failed
+renaming /var/log/area1_fortify_autoupdater_install.log to /var/log/area1_fortify_autoupdater_install.log"-20160908-1473353891"
+creating new /var/log/area1_fortify_autoupdater_install.log mode = 0644 uid = 0 gid = 0
+switching euid to 0 and egid to 0
+administrator@area1-fortify:/tmp$ more !$
+more /etc/logrotate.d/fortify_updater
+/var/log/area1_fortify_autoupdater_install.log {
+    su root adm
+    maxsize 100M
+    monthly
+    rotate 12
+        dateext
+        dateformat "-%Y%m%d-%s"
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 644 root root
+}
+----------------------------------ooOOOOoo---------------------------------------
+
+Virtualenv and Virtualbox shared folders issue
+
+Shared folders on Virtualbox dont allow symbolic links for security reasons.
+
+So virtualenv creation fails with Read only error for filesystem.
+
+Two options
+
+use copy mode for virtualenv
+
+virtualenv --always-copy venv
+
+
+OR 
+
+change VirtualBox settings using 
+
+My steps to fix it:
+1. Use virtualenv==1.8.2 (not working with 1.8.4!)
+2. setextradata in host OS:
+
+VBoxManage setextradata CENTOS VBoxInternal2/SharedFoldersEnableSymlinksCreate/home/oe 1
+, where CENTOS - Virtualbox OS name, /home/oe - name of mounted folder
+3. Mount device in guest OS with read-write permissions:
+
+sudo mount -t vboxsf -o rw,uid=1000 shared_folder /mnt/shared_folder
+, where uid=1000 - uid of current user in guest OS (see /etc/passwd).
+
+https://github.com/pypa/virtualenv/issues/209
+
+----------------------------------ooOOOOoo---------------------------------------
+
+
