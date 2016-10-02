@@ -225,6 +225,20 @@ usermod -a -G vboxsf $USER
 reboot
 
 
+sudo mount -t vboxsf share ~/host
+
+Note that with this, the default mount options are used and all files are owned by root. This can be changed by adding some mount options. Options are passed on with the -o parameter. You can use multiple options with one parameter, seperate the values with a comma. See the man page of mount for more info on which options you can use. The User Manual also notes the options compatible with the Shared Folders. To mount the SF so that you are the owner of the files, use this command:
+CODE: SELECT ALL   EXPAND VIEW
+sudo mount -t vboxsf -o rw,uid=1000,gid=1000 share ~/host
+
+If you want to have it mount automatically upon each boot, put the mount command in /etc/rc.local (Debian based distro's), or whatever script is run at the end of the boot process. The Shared Folders service should mount them automatically, but that doesn't always happen.
+Using /etc/fstab has little effect, because that file is processed before the SF module is loaded and will fail to mount the share. Sometimes, the share does get mounted because the GA check for it when they are loaded upon boot, but it's very flaky, meaning it doesn't work most of the time. You're better of with the first option.
+When you put the mount command in /etc/rc.local, so it's mounted at startup, you can't use the short notation for your home folder. During startup, everything is done through the root user, so using ~ for home, means it's the home folder of Root (/root). Change it to the full path. For example:
+CODE: SELECT ALL   EXPAND VIEW
+mount -t vboxsf share /home/<username>/host
+
+https://forums.virtualbox.org/viewtopic.php?f=29&t=15868
+
 ----------------------------------ooOOOOoo---------------------------------------
 Xterm:
 
@@ -645,6 +659,11 @@ sudo chsh -s /bin/bash <username>
 
 sudo adduser <username> sudo
 
+sudo usermod -a -G sudo <username>
+
+cat /etc/passwd | grep <username>
+
+Add NOPASSWD:ALL in visudo 
 
 http://www.howtogeek.com/howto/ubuntu/add-a-user-on-ubuntu-server/
 
@@ -1027,6 +1046,11 @@ use the following example for the epoch value 1473353891
 administrator@:/tmp$ date --date '@1473353891'
 Thu Sep  8 16:58:11 UTC 2016
 
+date +'%Y-%m-%d'
+
+2017-09-17
+http://stackoverflow.com/questions/1401482/yyyy-mm-dd-format-date-in-shell-script
+
 ----------------------------------ooOOOOoo---------------------------------------
 
 logrotate
@@ -1099,4 +1123,109 @@ https://github.com/pypa/virtualenv/issues/209
 
 ----------------------------------ooOOOOoo---------------------------------------
 
+Deplaying OVA to ESXi using ovftool
 
+$ ovftool --disableVerification  --noSSLVerify --datastore=datastore1 --network="VM Network" ~/images/PA-VM-ESX-7.1.0.ova  vi://root@192.168.10.138
+
+http://www.vmwarebits.com/content/import-and-export-virtual-machines-command-line-vmwares-ovf-tool
+
+
+----------------------------------ooOOOOoo---------------------------------------
+git stash 
+
+git stash apply stash@{n}
+
+git stash list
+
+git stash clear
+
+git stash pop
+
+git stash save "Message"
+
+http://stackoverflow.com/questions/1910082/git-stash-apply-version
+
+
+for regular patch 
+
+git apply <diff>
+
+git apply --stat 
+
+git apply --check
+
+https://git-scm.com/docs/git-apply
+
+----------------------------------ooOOOOoo---------------------------------------
+
+pgrep amd pkill examples with regex
+
+pgrep and pkill
+-u is for process belonging to that user
+-f will match the whole command line and not just process name which is by default
+
+  pgrep -u brs autossh
+  pgrep -u brs ssh
+  ps -eaf | grep "10.10.16.5:10443" | grep -v grep | awk 'print $(2)' 
+  ps -eaf | grep "10.10.16.5:10443" | grep -v grep | awk 'print $(2)' | xargs kill
+  pgrep -f  "^.*ssh.*10022.*$"
+  pkill -f  "^.*ssh.*10022.*$"
+
+----------------------------------ooOOOOoo---------------------------------------
+network configuration static IP in ubuntu
+
+Set your IP address changes in /etc/network/interfaces. Example:
+
+auto eth0
+iface eth0 inet static
+
+address 192.168.1.128
+netmask 255.255.255.0
+network 192.168.1.0
+broadcast 192.168.1.255
+gateway 192.168.1.1
+Don't give your DNS configurations in /etc/resolv.conf because while we restart the server sometimes the configuration get erased.
+
+So use vim /etc/resolvconf/resolv.conf.d/base (while updating configs in this it doesn't get removed)
+
+example:
+
+search  (domain name)
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+Save and then restart your server, this fixed my static issue! :)
+
+http://askubuntu.com/questions/470237/assigning-a-static-ip-to-ubuntu-server-14-04-lts
+
+----------------------------------ooOOOOoo---------------------------------------
+
+Using Host DNS from the Guest VMs in VirtualBox
+
+VBoxManage list runningvms
+
+VBoxManage modifyvm "VM name" --natdnshostresolver1 on
+
+http://superuser.com/questions/641933/how-to-get-virtualbox-vms-to-use-hosts-dns
+
+----------------------------------ooOOOOoo---------------------------------------
+
+Using default interface names for eth0, eth1 in ubuntu
+
+ubuntu-16.04-server-amd64
+
+In the grub file, change
+
+GRUB_CMDLINE_LINUX=""
+to
+
+GRUB_CMDLINE_LINUX="net.ifnames=0"
+Then, type in:
+
+sudo update-grub
+and reboot your system
+
+sudo reboot
+
+http://askubuntu.com/questions/767786/changing-network-interfaces-name-ubuntu-16-04
+
+----------------------------------ooOOOOoo---------------------------------------
