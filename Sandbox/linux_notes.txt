@@ -1229,3 +1229,64 @@ sudo reboot
 http://askubuntu.com/questions/767786/changing-network-interfaces-name-ubuntu-16-04
 
 ----------------------------------ooOOOOoo---------------------------------------
+
+Installing JDCK and maven
+
+sudo apt-get install maven
+
+You got wrong package installed. The one which you instlled is not for Debian/ubuntu, its for Fedora, Oracle Linux, Red Hat Enterprise Linux, etc. Refer this link on OpenJDK site. Do
+
+sudo apt-get install openjdk-8-jdk
+Before running above, I would suggest you delete the wrong package using
+
+sudo apt-get purge java-1.8.0-openjdk-devel
+
+http://askubuntu.com/questions/683797/javac-package-is-missing
+
+JDK 8
+
+Debian, Ubuntu, etc.
+
+On the command line, type:
+
+$ sudo apt-get install openjdk-8-jre
+The openjdk-8-jre package contains just the Java Runtime Environment. If you want to develop Java programs then please install the openjdk-8-jdk package.
+
+Fedora, Oracle Linux, Red Hat Enterprise Linux, etc.
+
+On the command line, type:
+
+$ su -c "yum install java-1.8.0-openjdk"
+The java-1.8.0-openjdk package contains just the Java Runtime Environment. If you want to develop Java programs then install the java-1.8.0-openjdk-devel package.
+
+http://openjdk.java.net/install/
+
+
+user@lubuntu-vm:~$ ls -l /usr/bin/java
+lrwxrwxrwx 1 root root 22 Sep  8 15:12 /usr/bin/java -> /etc/alternatives/java
+
+user@lubuntu-vm:~$ ls -l /etc/alternatives/java
+lrwxrwxrwx 1 root root 46 Sep  8 15:12 /etc/alternatives/java -> /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+user@lubuntu-vm:~$ ls -l /usr/lib/jvm/
+total 4
+lrwxrwxrwx 1 root root   24 Feb 25  2016 default-java -> java-1.8.0-openjdk-amd64
+lrwxrwxrwx 1 root root   20 Jul 20 22:49 java-1.8.0-openjdk-amd64 -> java-8-openjdk-amd64
+drwxr-xr-x 5 root root 4096 Sep  8 15:12 java-8-openjdk-amd64
+
+
+user@lubuntu-vm:~$ update-alternatives --config java
+There is only one alternative in link group java (providing /usr/bin/java): /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+Nothing to configure.
+
+user@lubuntu-vm:~$ JAVA_HOME=/usr/lib/jvm/default-java
+user@lubuntu-vm:~$ export JAVA_HOME
+
+user@lubuntu-vm:~$ mvn --version
+Apache Maven 3.3.9
+Maven home: /usr/share/maven
+Java version: 1.8.0_91, vendor: Oracle Corporation
+Java home: /usr/lib/jvm/java-8-openjdk-amd64/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "4.4.0-36-generic", arch: "amd64", family: "unix"
+user@lubuntu-vm:~$ 
+
