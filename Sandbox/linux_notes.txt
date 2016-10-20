@@ -190,6 +190,19 @@ git branch --all
 Checkout and track remote branch
 git checkout -t [BRANCH]
 
+Change the Origin remote url to use ssh or https
+git remote -v 
+origin	https://github.domain.com/engineering/code.git (fetch)
+origin	https://github.domain.com/engineering/code.git (push)
+git remote set-url origin git@github.domain.com:engineering/code.git
+git remote -v
+origin	git@github.domain.com:engineering/code.git (fetch)
+origin	git@github.domain.com:engineering/code.git (push)
+
+Also for mounted directories, better to use ssh repo and use 
+ssh-add in the host and to login to guest machine (where the host source is mounted) ssh guest -A
+
+https://help.github.com/articles/changing-a-remote-s-url/
 
 ----------------------------------ooOOOOoo---------------------------------------
 virtualbox:
@@ -1201,6 +1214,7 @@ http://askubuntu.com/questions/470237/assigning-a-static-ip-to-ubuntu-server-14-
 
 Using Host DNS from the Guest VMs in VirtualBox
 
+VBoxManage list vms
 VBoxManage list runningvms
 
 VBoxManage modifyvm "VM name" --natdnshostresolver1 on
@@ -1290,3 +1304,22 @@ Default locale: en_US, platform encoding: UTF-8
 OS name: "linux", version: "4.4.0-36-generic", arch: "amd64", family: "unix"
 user@lubuntu-vm:~$ 
 
+----------------------------------ooOOOOoo---------------------------------------
+
+git getting repository root
+
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent$ git rev-parse --show-cdup
+
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent$ pwd
+/media/sf_hDocuments/code/remediation-agent
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent$ cd iso
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent/iso$ git rev-parse --show-cdup
+../
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent/iso$ git rev-parse --show-top-level
+--show-top-level
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent/iso$ git rev-parse --show-toplevel
+/media/sf_hDocuments/code/remediation-agent
+
+http://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command
+----------------------------------ooOOOOoo---------------------------------------
+----------------------------------ooOOOOoo---------------------------------------
