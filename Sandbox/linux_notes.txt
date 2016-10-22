@@ -121,9 +121,15 @@ git push --set-upstream origin master
 
 may have to do git pull origin master 
 
+git checkout -b <branch>
+git push -u origin <branch>
+
 try git branch and git pull commands to see if they are fine and test with git remote -v
 
 https://confluence.atlassian.com/bitbucketserver/permanently-authenticating-with-git-repositories-776639846.html
+
+git branch -d agent_deploy
+git push origin --delete agent_deploy
 
 git config --global credential.helper 'cache --timeout 72000'
 git config --global color.ui true
@@ -1068,28 +1074,28 @@ http://stackoverflow.com/questions/1401482/yyyy-mm-dd-format-date-in-shell-scrip
 
 logrotate
 
-administrator@area1-fortify:/tmp$ sudo logrotate -df /etc/logrotate.d/fortify_updater 
-reading config file /etc/logrotate.d/fortify_updater
+administrator@hello-feature:/tmp$ sudo logrotate -df /etc/logrotate.d/feature_updater 
+reading config file /etc/logrotate.d/feature_updater
 
 Handling 1 logs
 
-rotating pattern: /var/log/area1_fortify_autoupdater_install.log  forced from command line (12 rotations)
+rotating pattern: /var/log/hello.log  forced from command line (12 rotations)
 empty log files are not rotated, log files >= 104857600 are rotated earlier, old logs are removed
 switching euid to 0 and egid to 4
-considering log /var/log/area1_fortify_autoupdater_install.log
+considering log /var/log/hello.log
   log needs rotating
-rotating log /var/log/area1_fortify_autoupdater_install.log, log->rotateCount is 12
+rotating log /var/log/hello.log, log->rotateCount is 12
 Converted ' "-%Y%m%d-%s"' -> '"-%Y%m%d-%s"'
 dateext suffix '"-20160908-1473353891"'
 glob pattern '"-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"'
 glob finding logs to compress failed
 glob finding old rotated logs failed
-renaming /var/log/area1_fortify_autoupdater_install.log to /var/log/area1_fortify_autoupdater_install.log"-20160908-1473353891"
-creating new /var/log/area1_fortify_autoupdater_install.log mode = 0644 uid = 0 gid = 0
+renaming /var/log/hello.log to /var/log/hello.log"-20160908-1473353891"
+creating new /var/log/hello.log mode = 0644 uid = 0 gid = 0
 switching euid to 0 and egid to 0
-administrator@area1-fortify:/tmp$ more !$
-more /etc/logrotate.d/fortify_updater
-/var/log/area1_fortify_autoupdater_install.log {
+administrator@hello-feature:/tmp$ more !$
+more /etc/logrotate.d/feature_updater
+/var/log/hello.log {
     su root adm
     maxsize 100M
     monthly
@@ -1102,6 +1108,52 @@ more /etc/logrotate.d/fortify_updater
     notifempty
     create 644 root root
 }
+
+more /etc/logrotate.d/logrotate_hello
+/var/log/*hello*.log {
+    su root adm
+    maxsize 100M
+    daily
+    rotate 1
+    dateext
+    dateformat -%Y-%m-%d
+    dateyesterday
+    copytruncate
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 644 root root
+    postrotate
+        /opt/hello/tools/support_files_export.sh > /dev/null
+    endscript
+    sharedscripts
+}
+
+/var/log/apache2/*_log {
+        weekly
+        missingok
+        rotate 52
+        compress
+        delaycompress
+        notifempty
+        create 640 root adm
+        sharedscripts
+        postrotate
+                if [ -f /var/run/apache2.pid ]; then
+                        /etc/init.d/apache2 restart > /dev/null
+                fi
+        endscript
+}
+
+to force run 
+logrotate -vf /etc/logrotate.d/apache2.conf
+
+
+http://www.thecave.info/execute-logrotate-command-manually/
+
+
+
 ----------------------------------ooOOOOoo---------------------------------------
 
 Virtualenv and Virtualbox shared folders issue
@@ -1177,8 +1229,8 @@ pgrep and pkill
 -u is for process belonging to that user
 -f will match the whole command line and not just process name which is by default
 
-  pgrep -u brs autossh
-  pgrep -u brs ssh
+  pgrep -u feature autossh
+  pgrep -u feature ssh
   ps -eaf | grep "10.10.16.5:10443" | grep -v grep | awk 'print $(2)' 
   ps -eaf | grep "10.10.16.5:10443" | grep -v grep | awk 'print $(2)' | xargs kill
   pgrep -f  "^.*ssh.*10022.*$"
@@ -1322,4 +1374,97 @@ anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent/iso$ 
 
 http://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command
 ----------------------------------ooOOOOoo---------------------------------------
+
+rsyslog
+
+i$umask 0000
+
+$FileCreateMode 0666
+
+# A template that resambles traditional syslogd file output:
+$template TraditionalFormat,"%timegenerated% %HOSTNAME% %syslogtag%%msg:::drop-last-lf%\n"
+
+# A more verbose template:
+$template precise,"%syslogpriority%,%syslogfacility%,%timegenerated::fulltime%,%HOSTNAME%,%syslogtag%,%msg%\n"
+
+# A template that resembles RFC 3164 on-the-wire format:
+# (yes, there is NO space betwen syslogtag and msg! that's important!)
+$template RFC3164fmt,"<%PRI%>%TIMESTAMP% %HOSTNAME% %syslogtag%%msg%"
+
+# a template resembling traditional wallmessage format:
+$template wallmsg,"\r\n\7Message from syslogd@%HOSTNAME% at %timegenerated% ...\r\n %syslogtag%%msg%\n\r"
+
+# The template below emulates winsyslog format, but we need to check the time
+# stamps used. It is also a good sampleof the property replacer in action.
+$template WinSyslogFmt,"%HOSTNAME%,%timegenerated:1:10:date-rfc3339%,%timegenerated:12:19:date-rfc3339%,%timegenerated:1:10:date-rfc3339%,%timegenerated:12:19:date-rfc3339%,%syslogfacil
+ity%,%syslogpriority%,%syslogtag%%msg%\n"
+
+# A template used for database writing (notice it *is* an actual
+# sql-statement):
+$template dbFormat,"insert into SystemEvents (Message, Facility,FromHost, Priority, DeviceReportedTime, ReceivedAt, InfoUnitID, SysLogTag) values ('%msg%', %syslogfacility%, '%HOSTNAME%
+',%syslogpriority%, '%timereported:::date-mysql%', '%timegenerated:::date-mysql%', %iut%, '%syslogtag%')",sql
+
+#
+# Area1 custom
+$template comp,"%timegenerated% %syslogtag% LOG-%syslogpriority%-%syslogpriority-text:::uppercase%:%msg%\n"
+$ActionFileDefaultTemplate comp
+
+:rawmsg,contains,"comp_feature" /var/log/comp.log
+
+& ~
+
+
+Add to a file number that can be picked up before 50-default.conf is read. This way your directives will be taken over other directives.:w
+
+http://www.rsyslog.com/doc/v8-stable/configuration/templates.html
+
+http://www.rsyslog.com/how-to-bind-a-template/
+
+
 ----------------------------------ooOOOOoo---------------------------------------
+
+shell functions
+
+#
+# Exit, run and critical command execution wrapper functions
+#
+# Exit Trap functions 
+exit_trap () {
+  local lc="$BASH_COMMAND" rc=$?
+  echo "Command [$lc] exited with code [$rc]" | tee -a ${FORTIFY_UPDATER_LOG_FILE} > /dev/null
+}
+
+# Exit option if we are handling the command status.
+die() { echo >&2 -e "\nERROR: $@\n" | tee -a ${FORTIFY_UPDATER_LOG_FILE} > /dev/null exit 1; }
+
+# run a command but dont fail the script if it fails, just log 
+run() { set +e; "$@"; code=$?; [ $code -ne 0 ] && echo "command [$*] failed with error code $code"; set -e; }
+
+# run the command and exit if it fails with a log
+run_critical() { "$@"; code=$?; [ $code -ne 0 ] && die "command [$*] failed with error code $code"; }
+
+
+# Script exits on any command failure. Better to set the trap to log if we die
+trap exit_trap EXIT
+set -e
+
+# Treat unset variables as failure
+set -u
+# Pipe command status is first failed command status
+set -o pipefail
+
+
+#
+# Utility functions 
+#
+copy_file ()
+{
+    if [ -f $1 ]; then
+        echo "copying $1 to $2" | tee -a ${DEF_LOG_FILE} > /dev/null
+        cp $1 $2
+    else
+        echo "$FUNCNAME (): cannot find $1"  | tee -a ${DEF_LOG_FILE} > /dev/null
+    fi
+}
+
+
