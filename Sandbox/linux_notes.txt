@@ -1467,6 +1467,12 @@ copy_file ()
     fi
 }
 
+if [ $? -eq 0 ]; then
+    echo OK
+else
+    echo FAIL
+fi
+
 
 can use run copy_file 
 it still works as expected
@@ -1475,9 +1481,58 @@ it still works as expected
 ntp updates
 
 sudo ntpdate -s time.nist.gov
+----------------------------------ooOOOOoo---------------------------------------
+
+mounting the filessystem for read write in ubuntu recovery.
+
+mount -o remount,rw / 
+----------------------------------ooOOOOoo---------------------------------------
+
+find options 
+
+-mtime N means files whose age A in days satisfies N ≤ A < N+1. In other words, -mtime N selects files that were last modified between N and N+1 days ago.
+
+-mtime -N means files whose age A satisfies A < N, i.e. files modified less than N days ago. Less intuitively, -mtime +N means files whose age A satisfies N+1 ≤ A, i.e. files modified at least N+1 days ago.
+
+For example, -mtime 1 selects files that were modified between 1 and 2 days ago. -mtime +1 selects files that were modified at least 2 days ago. To get files modified at least 1 day ago, use -mtime +0.
+
+The description “was last modified n*24 hours ago” is only an approximation, and not a very clear one.
+
+If you find these rules hard to remember, use a reference file instead.
+
+touch -d '1 day ago' cutoff
+find . -newer cutoff
+(The syntax “1 day ago” requires GNU touch.)
+
+
+Fractional 24-hour periods are truncated! That means that “find -mtime +1” says to match files modified two or more days ago.
+
+find . -mtime +0 # find files modified greater than 24 hours ago
+find . -mtime 0 # find files modified between now and 1 day ago
+# (i.e., in the past 24 hours only)
+find . -mtime -1 # find files modified less than 1 day ago (SAME AS -mtime 0)
+find . -mtime 1 # find files modified between 24 and 48 hours ago
+find . -mtime +1 # find files modified more than 48 hours ago
+The following may only work on GNU?
+
+find . -mmin +5 -mmin -10 # find files modified between
+# 6 and 9 minutes ago
+find / -mmin -10 # modified less than 10 minutes ago
 
 
 
+http://unix.stackexchange.com/questions/92346/why-does-find-mtime-1-only-return-files-older-than-2-days
 
 ----------------------------------ooOOOOoo---------------------------------------
+
+date for yesterday and day before or any other day
+
+For yesterday,
+
+date -d '-1 day' '+%Y%d%m'
+For day before yesterday,
+
+date -d '-2 day' '+%Y%d%m'
+
+http://stackoverflow.com/questions/22043088/how-to-get-yesterday-and-day-before-yesterday-in-linux
 ----------------------------------ooOOOOoo---------------------------------------
