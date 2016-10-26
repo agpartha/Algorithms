@@ -1536,3 +1536,12 @@ date -d '-2 day' '+%Y%d%m'
 
 http://stackoverflow.com/questions/22043088/how-to-get-yesterday-and-day-before-yesterday-in-linux
 ----------------------------------ooOOOOoo---------------------------------------
+
+rename
+
+rename -vnf 's/agent_log/DNR-agent_log/' agent_log*2016-10-22*.log
+
+https://www.maketecheasier.com/rename-files-in-linux/
+
+----------------------------------ooOOOOoo---------------------------------------
+----------------------------------ooOOOOoo---------------------------------------
