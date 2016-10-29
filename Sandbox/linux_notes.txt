@@ -1360,17 +1360,17 @@ user@lubuntu-vm:~$
 
 git getting repository root
 
-anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent$ git rev-parse --show-cdup
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/feature-agent$ git rev-parse --show-cdup
 
-anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent$ pwd
-/media/sf_hDocuments/code/remediation-agent
-anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent$ cd iso
-anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent/iso$ git rev-parse --show-cdup
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/feature-agent$ pwd
+/media/sf_hDocuments/code/feature-agent
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/feature-agent$ cd iso
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/feature-agent/iso$ git rev-parse --show-cdup
 ../
-anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent/iso$ git rev-parse --show-top-level
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/feature-agent/iso$ git rev-parse --show-top-level
 --show-top-level
-anand.parthasarathy@mock-local:/media/sf_hDocuments/code/remediation-agent/iso$ git rev-parse --show-toplevel
-/media/sf_hDocuments/code/remediation-agent
+anand.parthasarathy@mock-local:/media/sf_hDocuments/code/feature-agent/iso$ git rev-parse --show-toplevel
+/media/sf_hDocuments/code/feature-agent
 
 http://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command
 ----------------------------------ooOOOOoo---------------------------------------
@@ -1481,6 +1481,9 @@ it still works as expected
 ntp updates
 
 sudo ntpdate -s time.nist.gov
+
+sudo timedatectl set-timezone Etc/UTC
+
 ----------------------------------ooOOOOoo---------------------------------------
 
 mounting the filessystem for read write in ubuntu recovery.
@@ -1544,4 +1547,36 @@ rename -vnf 's/agent_log/DNR-agent_log/' agent_log*2016-10-22*.log
 https://www.maketecheasier.com/rename-files-in-linux/
 
 ----------------------------------ooOOOOoo---------------------------------------
+
+date conversions
+
+anand.parthasarathy@feature-local:/data/log/feature_agent_logs/$ date -d "Fri Oct 28 02:00:53 PDT 2016" +%s
+1477645253
+anand.parthasarathy@feature-local:/data/log/feature_agent_logs/$ date -d "Fri Oct 28 02:00:53 PDT 2016" -u +%s
+1477645253
+anand.parthasarathy@feature-local:/data/log/feature_agent_logs/$ date -u --date @1477645253
+Fri Oct 28 09:00:53 UTC 2016
+anand.parthasarathy@feature-local:/data/log/feature_agent_logs/$ date +%s
+1477671390
+anand.parthasarathy@feature-local:/data/log/feature_agent_logs/$ 
+
+comp@host:~/comp/feature-agent$ cat iso/feature/build_time
+Fri Oct 28 22:56:58 UTC 2016
+comp@host:~/comp/feature-agent$ date -d "$(cat iso/feature/build_time)" +%s
+1477695418
+comp@host:~/comp/feature-agent$ date -u --date @1477695418
+Fri Oct 28 22:56:58 UTC 2016
+comp@host:~/comp/feature-agent$ date -u --date @1477695418 +%Y-%m-%d_%H:%M:%S
+2016-10-28_22:56:58
+
+
+http://stackoverflow.com/questions/1092631/get-current-time-in-seconds-since-the-epoch-on-linux-bash
+
 ----------------------------------ooOOOOoo---------------------------------------
+
+git config when not natively authenticated and not having global config set.
+
+git config --global user.name "Anand Girish B. Parthasarathy"
+git config --global user.email "code.ag@outlook.com"
+git commit --amend --reset-author
+
