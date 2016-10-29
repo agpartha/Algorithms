@@ -1569,6 +1569,16 @@ Fri Oct 28 22:56:58 UTC 2016
 comp@host:~/comp/feature-agent$ date -u --date @1477695418 +%Y-%m-%d_%H:%M:%S
 2016-10-28_22:56:58
 
+$ date -d "$(cat build_time)" +%Y-%m-%d_%H:%M:%S
+2016-10-28_17:17:16
+$ cat build_time
+Sat Oct 29 00:17:16 UTC 2016
+$ date -u -d "$(cat build_time)" +%Y-%m-%d_%H:%M:%S
+2016-10-29_00:17:16
+$ date -u -d "$(cat build_time)" +%Y-%m-%d_%H-%M-%S
+2016-10-29_00-17-16
+
+
 
 http://stackoverflow.com/questions/1092631/get-current-time-in-seconds-since-the-epoch-on-linux-bash
 
