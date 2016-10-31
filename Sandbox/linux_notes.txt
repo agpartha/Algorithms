@@ -1590,3 +1590,34 @@ git config --global user.name "Anand Girish B. Parthasarathy"
 git config --global user.email "code.ag@outlook.com"
 git commit --amend --reset-author
 
+permissions only change
+
+git update-index --chmod=+x script.sh
+
+http://stackoverflow.com/questions/10516201/updating-file-permissions-only-in-git
+
+----------------------------------ooOOOOoo---------------------------------------
+
+cut command 
+
+$ ls update.tar.gz* | cut -d - -f 1 
+update.tar.gz
+$ echo $(ls update.tar.gz* | cut -d - -f 1 )
+update.tar.gz
+
+----------------------------------ooOOOOoo---------------------------------------
+
+cscope 
+
+export CSCOPE_EDITOR=`which emacs`
+
+find . -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" > cscope.files
+
+cscope -q -R -b -i cscope.files
+
+cscope -d
+
+https://courses.cs.washington.edu/courses/cse451/12sp/tutorials/tutorial_cscope.html
+
+----------------------------------ooOOOOoo---------------------------------------
+----------------------------------ooOOOOoo---------------------------------------
