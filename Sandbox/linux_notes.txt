@@ -131,6 +131,12 @@ https://confluence.atlassian.com/bitbucketserver/permanently-authenticating-with
 git branch -d agent_deploy
 git push origin --delete agent_deploy
 
+renaming a branch locally and remotely
+
+git branch -m old_branch new_branch         # Rename branch locally    
+git push origin :old_branch                 # Delete the old branch    
+git push --set-upstream origin new_branch   # Push the new branch, set local branch to track the new remote
+
 git config --global credential.helper 'cache --timeout 72000'
 git config --global color.ui true
 
@@ -207,6 +213,17 @@ origin	git@github.domain.com:engineering/code.git (push)
 
 Also for mounted directories, better to use ssh repo and use 
 ssh-add in the host and to login to guest machine (where the host source is mounted) ssh guest -A
+
+Removing tags
+git ls-remote --tags origin | awk '/agent-.*/ {print ":" $2}'  | grep -v "\}" 
+git ls-remote --tags origin | awk '/agent-.*/ {print ":" $2}'  | grep -v "\}" | xargs git push origin
+
+Similarly for removing these pre-release tags from a local git repo:
+
+$ git tag -l | awk '/^(.*[a-z])$/ {print $1}'  | xargs git tag -d
+
+
+http://blog.siyelo.com/how-to-bulk-delete-remote-git-tags/
 
 https://help.github.com/articles/changing-a-remote-s-url/
 
@@ -1585,17 +1602,6 @@ http://stackoverflow.com/questions/1092631/get-current-time-in-seconds-since-the
 ----------------------------------ooOOOOoo---------------------------------------
 
 git config when not natively authenticated and not having global config set.
-
-git config --global user.name "Anand Girish B. Parthasarathy"
-git config --global user.email "code.ag@outlook.com"
-git commit --amend --reset-author
-
-permissions only change
-
-git update-index --chmod=+x script.sh
-
-http://stackoverflow.com/questions/10516201/updating-file-permissions-only-in-git
-
 ----------------------------------ooOOOOoo---------------------------------------
 
 cut command 
