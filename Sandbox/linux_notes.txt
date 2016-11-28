@@ -1626,4 +1626,64 @@ cscope -d
 https://courses.cs.washington.edu/courses/cse451/12sp/tutorials/tutorial_cscope.html
 
 ----------------------------------ooOOOOoo---------------------------------------
+
+decoding crashes without core
+
+If this were a program, not a shared library
+Run
+ addr2line -e yourSegfaultingProgram 00cd6df4
+edited Sep 3 '13 at 19:59
+Peter
+9,033 9 30
+asked Sep 3 '13 at 8:20
+skg
+504 10 23
+                      http://stackoverflow.com/questions/18587360/ubuntu-segfault-at-125-ip-00cd6df4-sp-bfeef720-error-6-in-libqtcore-so-4-7-4b5?noredirect=1&lq=1 2/3
+11/16/2016 linux - Ubuntu: segfault at 125 ip 00cd6df4 sp bfeef720 error 6 in libQtCore.so.4.7.4[b51000+2ca000]? - Stack Overflow
+(and repeat for the other instruction pointer values given) to see where the error is happening. Better, get a debug­instrumented build, and reproduce the problem under a debugger such as gdb.
+Since it's a shared library
+You're hosed, unfortunately; it's not possible to know where the libraries were placed in memory by the dynamic linker after­the­fact. Reproduce the problem under gdb.
+What the error means
+Here's the breakdown of the fields:
+address ­ the location in memory the code is trying to access (it's likely that 10 and 11 are offsets from a pointer we expect to be set to a valid value but which is instead pointing to 0)
+ip ­ instruction pointer, ie. where the code which is trying to do this lives
+sp ­ stack pointer
+error ­ value of errno, ie. last error code which was reported by a syscall
+Also When system requests fail, error code are returned. To understand the nature of the error these codes need to be interpreted. They are recorded in:­
+/usr/include/asm/errno.h
+
+ex:
+
+Nov 21 10:57:27 kernel: LOG-6-INFO:[2386015.680183] process_feature[7263]: segfault at 20 ip 0000000000403614 sp 00007fd054b57de0 error 4 in process_feature[400000+1a000]
+user@host:~$ sudo addr2line -e /feature/bin/process_feature 0000000000403614
+/home/user/feature/src/process_feature_main.c:74 (discriminator 1)
+
+
+http://stackoverflow.com/questions/18587360/ubuntu-segfault-at-125-ip-00cd6df4-sp-bfeef720-error-6-in-libqtcore-so-4-7-4b5?noredirect=1&lq=1
+----------------------------------ooOOOOoo---------------------------------------
+
+vim rc files
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+    " Use filetype detection and file-based automatic indenting.
+    filetype plugin indent on
+
+    " Use actual tab chars in Makefiles.
+    autocmd FileType make set tabstop=8 shiftwidth=8 softtabstop=0 noexpandtab
+endif
+" For everything else, use a tab width of 4 space chars.
+set tabstop=4       " The width of a TAB is set to 4.
+                    " Still it is a \t. It is just that
+                    " Vim will interpret it to be having
+                    " a width of 4.
+set shiftwidth=4    " Indents will have a width of 4.
+set softtabstop=4   " Sets the number of columns for a TAB.
+set expandtab       " Expand TABs to spaces.
+set smartindent
+set cindent
+set paste
+syn on
+
+----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
