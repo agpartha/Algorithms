@@ -1686,4 +1686,9 @@ set paste
 syn on
 
 ----------------------------------ooOOOOoo---------------------------------------
+UTC time
+sudo dpkg-reconfigure tzdata
+then go to "Etc" or "None of the above", there to UTC, enter, you're done. It actually changes files /etc/timezone and /etc/localtime.
+
+http://askubuntu.com/questions/117359/how-do-i-change-the-timezone-to-utc
 ----------------------------------ooOOOOoo---------------------------------------
