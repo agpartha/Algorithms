@@ -1692,3 +1692,11 @@ then go to "Etc" or "None of the above", there to UTC, enter, you're done. It ac
 
 http://askubuntu.com/questions/117359/how-do-i-change-the-timezone-to-utc
 ----------------------------------ooOOOOoo---------------------------------------
+
+macosX changing creation time and modified time 
+
+touch –mt 201006301525 /Volumes/Mac\ HD/Pictures/myfile.jpg
+
+http://blog.grapii.com/2010/07/change-a-files-creationmodified-date-on-mac-os-x/
+----------------------------------ooOOOOoo---------------------------------------
+----------------------------------ooOOOOoo---------------------------------------
