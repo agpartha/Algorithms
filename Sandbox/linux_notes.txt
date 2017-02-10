@@ -1631,6 +1631,7 @@ cscope
 export CSCOPE_EDITOR=`which emacs`
 
 find . -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" > cscope.files
+find . -name "*.java" -o -name "*.xml" > cscope.files
 
 cscope -q -R -b -i cscope.files
 
