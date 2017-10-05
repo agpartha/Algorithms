@@ -33,10 +33,10 @@
 #include <stdlib.h>
 
 
-unsigned long  n_bits = 75;
-unsigned long  n_bytes = 0;
+uint32_t  n_bits = 75;
+uint32_t  n_bytes = 0;
 
-void set_bit(char *bit_flag, unsigned long value)
+void set_bit(uint8_t *bit_flag, uint32_t value)
 {
   /*
    * Get the byte number & the bit position in the byte
@@ -48,7 +48,7 @@ void set_bit(char *bit_flag, unsigned long value)
 }
 
 
-void clear_bit(char *bit_flag, unsigned long value)
+void clear_bit(uint8_t *bit_flag, uint32_t value)
 {
   /*
    * Get the byte number & the bit position in the byte
@@ -58,7 +58,7 @@ void clear_bit(char *bit_flag, unsigned long value)
    *bit_flag &= ~(0x1 << (value % 8));
 }
 
-void set_n_bits(char *bit_flag, unsigned long n_bits)
+void set_n_bits(uint8_t *bit_flag, uint32_t n_bits)
 {
 	if (n_bits > 8) {
 		memset (bit_flag, 0xFF, n_bits / 8);
@@ -68,7 +68,7 @@ void set_n_bits(char *bit_flag, unsigned long n_bits)
 
 
 
-int test_bit(char *bit_flag, unsigned long value)
+int test_bit(uint8_t *bit_flag, uint32_t value)
 {
   /*
    * Get the byte number & the bit position in the byte
@@ -78,11 +78,11 @@ int test_bit(char *bit_flag, unsigned long value)
    return(*bit_flag & (0x1 << (value % 8))) ? 1 : 0;
 }
 
-void show_bits(char *bit_flag, unsigned long n_bits)
+void show_bits(uint8_t *bit_flag, uint32_t n_bits)
 {
-   unsigned long bit_cnt = 0;
+   uint32_t bit_cnt = 0;
    unsigned char mask = 0x01;
-   unsigned long ban_min, ban_max;
+   uint32_t ban_min, ban_max;
 
    if (n_bits == 1)  {
       printf("\nBits  0\n%d \n", *bit_flag & 0x01);
@@ -91,7 +91,7 @@ void show_bits(char *bit_flag, unsigned long n_bits)
    
    /* Per Row max bits to display */
    ban_max = (n_bits > 32) ? 31: n_bits - 1;
-   printf ("\nBits  0 --> %lu\n", ban_max);
+   printf ("\nBits  0 --> %u\n", ban_max);
 
    while (bit_cnt < n_bits) {
       printf("%d ", (*bit_flag & mask)  ? 1:0);
@@ -110,7 +110,7 @@ void show_bits(char *bit_flag, unsigned long n_bits)
         if (n_bits > bit_cnt) {
            ban_min = bit_cnt;
            ban_max = (bit_cnt + 32) > n_bits ? n_bits - 1: (bit_cnt + 31);
-           printf ("\nBits %lu --> %lu\n", ban_min, ban_max);
+           printf ("\nBits %u --> %u\n", ban_min, ban_max);
         } else 
            printf ("\n");
       }
@@ -119,7 +119,7 @@ void show_bits(char *bit_flag, unsigned long n_bits)
       printf ("\n");
 }
 
-int any_bit_set (unsigned char *dbg_flag, size_t n_bytes)
+int any_bit_set (uint8_t *dbg_flag, size_t n_bytes)
 {
     while (n_bytes--)
        if (*dbg_flag++)
@@ -130,14 +130,14 @@ int any_bit_set (unsigned char *dbg_flag, size_t n_bytes)
 
 int main (void)
 {
-  unsigned char *bit_flag    = NULL;
-  unsigned long  n_bits       = 75;
+  uint8_t *bit_flag    = NULL;
+  uint32_t  n_bits       = 75;
 
   /*
    * Get enough bytes to hold all the bits of the num_dsl.
    */
   n_bytes = (n_bits + 7)/8;
-  bit_flag = (char *)malloc(n_bytes); 
+  bit_flag = (uint8_t *)malloc(n_bytes); 
   if (bit_flag) 
      memset(bit_flag, 0, n_bytes);
   else 

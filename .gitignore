@@ -1,3 +1,7 @@
-a.out
-.DS_Store
-
+**/*.out
+**/.DS_Store
+**/.cproject
+**/.project
+**/.settings/
+**/Xcode*
+**/Debug*
